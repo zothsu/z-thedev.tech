@@ -56,5 +56,5 @@ The goal of this project is to create a reproducible, secure, and minimal Docker
 - [ ] Set up automated backups for site content and Docker volumes
 - [ ] Add CI/CD pipeline for content or container deployment via GitHub Actions
 
-> For a detailed daily breakdown, refer to the (dockerServerSetupJournal.md)[Docker Server Setup] in this repo.
+For a detailed daily breakdown, refer to the[Docker Server Setup](dockerServerSetupJournal.md) in this repo.
 
