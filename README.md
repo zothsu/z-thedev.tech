@@ -2,6 +2,8 @@
 
 This project outlines the steps taken to create a hardened, self-hosted Docker server running on a Linode VPS. It includes setup and deployment of a secure web server with HTTPS using Caddy and Let's Encrypt.
 
+For a detailed daily breakdown, refer to the [Docker Server Setup](dockerServerSetupJournal.md) in this repo.
+
 ## Overview
 The goal of this project is to create a reproducible, secure, and minimal Docker-based environment to serve static or containerized web content. Caddy is used as the primary web server due to its automatic HTTPS features.
 
@@ -51,10 +53,15 @@ The goal of this project is to create a reproducible, secure, and minimal Docker
 - Snapshot the server regularly before major changes
 - For dynamic apps, extend this setup with environment-specific containers
 
+## Thanks
+[Choose a License](https://choosealicense.com/)
+
 ## TODO / Future Improvements
 - [ ] Re-enable and configure IPv6 support with firewall and Fail2Ban rules
 - [ ] Set up automated backups for site content and Docker volumes
 - [ ] Add CI/CD pipeline for content or container deployment via GitHub Actions
 
-For a detailed daily breakdown, refer to the [Docker Server Setup](dockerServerSetupJournal.md) in this repo.
+## License 
+
+Licensed under [GNP General Public License](LICENSE)
 
