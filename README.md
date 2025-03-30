@@ -35,7 +35,7 @@ The goal of this project is to create a reproducible, secure, and minimal Docker
 - Let's Encrypt (via Caddy)
 
 ## How to Use
-1. Provision a VPS (Linode used in this case)
+1. Find yourself a VPS (Linode used in this case)
 2. Set up your SSH key and secure the server
 3. Install Docker and Docker Compose
 4. Clone this repository and customize `index.html`, `Caddyfile`, and `docker-compose.yml`
@@ -44,7 +44,7 @@ The goal of this project is to create a reproducible, secure, and minimal Docker
 ## Security
 - Docker container permissions locked down with `cap_drop`, `read_only`, and proper volume setup
 - Caddy handles TLS certificate issuance and renewal
-- Periodic system audits with Lynis
+- System audits with Lynis
 
 ## Notes
 - DNS must point to your VPS IP before TLS provisioning
