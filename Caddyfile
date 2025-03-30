@@ -1,0 +1,4 @@
+z-thedev.tech, www.z-thedev.tech {
+    root * /srv
+    file_server
+}
