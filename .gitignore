@@ -1,0 +1,6 @@
+# Ignore Docker volumes/config
+caddy_data/
+caddy_config/
+.env
+*.log
+__pycache__/
