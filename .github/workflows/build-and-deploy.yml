@@ -47,3 +47,4 @@ jobs:
             git pull  # (If your server is pulling the same repo. Omit if not needed.)
             docker compose pull
             docker compose up -d
+          debug: true
