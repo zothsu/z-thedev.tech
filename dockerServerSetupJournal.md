@@ -104,3 +104,48 @@ volumes:
   caddy_config:
 ```
 
+## Summary for 2025-03-31: Docker CI/CD Setup and GitHub Integration
+
+### What We Did:
+
+#### 1. **Cleaned Up Docker Volumes and Containers**
+- Shut down running containers using `docker-compose down`
+- Removed orphaned or stuck volumes and networks
+- Verified Docker status and cleared unused assets
+
+#### 2. **Updated Docker Image & Repository**
+- Built Docker image with tag: `zthdev/mycaddy:latest`
+- Logged in to Docker Hub and fixed access issues (used correct username)
+- Successfully pushed image to Docker Hub
+
+#### 3. **Prepared Project Repository**
+- Reviewed project files:
+  - `Dockerfile`
+  - `docker-compose.yml`
+  - `Caddyfile`
+  - `html/`
+- Ensured everything was committed to a GitHub repo named `z-thedev.tech`
+
+#### 4. **Created GitHub Actions Workflow**
+- Added `.github/workflows/build-and-deploy.yml`
+- Defined steps for building Docker image and pushing to Docker Hub
+- Stored DockerHub credentials as GitHub Secrets:
+  - `DOCKER_USERNAME`
+  - `DOCKER_PASSWORD`
+
+#### 5. **Troubleshooting Login Issues**
+- Encountered error: `incorrect username or password`
+- Moved secrets out of `env` block to top-level GitHub repo secrets
+- Retested login and confirmed credentials were saved correctly
+
+### What’s Left:
+- Confirm successful workflow run (build + push)
+- Automate container redeployment or pull new image on your server
+
+---
+
+### Notes:
+- Your Docker image is ready and tested locally.
+- GitHub repo is linked and secrets are securely stored.
+- CI pipeline is configured and almost complete.
+
