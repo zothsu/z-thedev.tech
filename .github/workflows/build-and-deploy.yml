@@ -42,7 +42,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           port: 22
           ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
-          port: 22
           script: |
             cd /path/to/your/compose/folder
             git pull  # (If your server is pulling the same repo. Omit if not needed.)
