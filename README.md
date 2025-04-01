@@ -63,5 +63,5 @@ The goal of this project is to create a reproducible, secure, and minimal Docker
 
 ## License 
 
-Licensed under [GNP General Public License](LICENSE)
+Licensed under [GNP General Public License](LICENSE) .
 
