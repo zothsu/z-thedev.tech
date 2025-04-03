@@ -25,10 +25,7 @@ jobs:
         with:
           context: .
           push: true
-          run: | 
-              docker build -t latest .
-              dockr tag zthedevtech:latest zthedev/zthedevtech:latest
-              docker push zthedev/zthedevtech:latest
+          tags: zthedev/mycaddy:latest
 
   deploy:
     needs: build-and-push  # Wait for the build-and-push job
