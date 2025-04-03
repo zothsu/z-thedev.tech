@@ -25,11 +25,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mycaddy:latest
-          # For more advanced versioning, you can add multiple tags, e.g.:
-          # tags: >
-          #   ${{ secrets.DOCKERHUB_USERNAME }}/mycaddy:latest,
-          #   ${{ secrets.DOCKERHUB_USERNAME }}/mycaddy:${{ github.sha }}
+          run: | 
+              docker build -t latest .
+              docker push zthedev/zthedevtech:latest
+
+
 
   deploy:
     needs: build-and-push  # Wait for the build-and-push job
