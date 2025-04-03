@@ -27,9 +27,8 @@ jobs:
           push: true
           run: | 
               docker build -t latest .
+              dockr tag zthedevtech:latest zthedev/zthedevtech:latest
               docker push zthedev/zthedevtech:latest
-
-
 
   deploy:
     needs: build-and-push  # Wait for the build-and-push job
