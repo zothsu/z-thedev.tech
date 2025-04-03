@@ -1,71 +1,69 @@
-# Docker Server Setup
-
-A breakdown of setting up and hardening a Docker server from scratch, culminating in serving a static site securely with HTTPS using Caddy and Let's Encrypt.
+# DevOps Project Journal — z-thedev.tech
 
 ---
 
 ## 2025-03-29 — DigitalOcean + SSH Setup
 
 ### What I Did
-- Launched a VPS on DigitalOcean.
-- Assigned a static IP.
-- Added SSH key manually.
-- Created user `***`.
-- Locked down root SSH access.
-- Configured UFW firewall (allowing SSH only from current IP).
-- Ran into complications with IPv6 access — decided to skip for now.
+- Launched a VPS on DigitalOcean
+- Assigned a static IP
+- Added SSH key manually
+- Created user `***`
+- Locked down root SSH access
+- Configured UFW firewall (allowing SSH only from current IP)
+- Ran into complications with IPv6 access — decided to skip for now
 
 ### Problems
-- IPv6 access wasn't working (SSH via IPv6 wouldn't connect).
-- Fail2ban failed to start due to duplicate `[sshd]` jail entries.
-- Fixed by removing extra jail definition in `jail.local`.
+- IPv6 SSH access not working
+- `fail2ban` failed to start due to duplicate `[sshd]` entries
+- Fixed by removing extra jail definition in `jail.local`
 
 ### Security Steps Completed
-- SSH hardened.
-- Fail2ban set up and functional.
-- Initial Lynis audit completed.
-- TODO added: revisit IPv6 security rules.
+- SSH hardened
+- `fail2ban` functional
+- Initial Lynis audit complete
+- TODO: Revisit IPv6 security rules
 
 ---
 
 ## 2025-03-30 — Linode Rebuild + Docker + HTTPS
 
 ### What I Did
-- Moved to Linode due to DigitalOcean limitations.
-- Renamed host to `***-dev`.
-- Created fresh user and gave `sudo` permissions.
-- Copied SSH key and secured permissions.
-- Locked down UFW firewall, allowing for VPN use.
-- Set up `fail2ban` properly with correct syntax.
-- Ran full Lynis audit and reviewed security recommendations.
-- Installed Docker and `docker-compose` (manual binary method).
-- Created a test site using `nginx:alpine`.
-- Replaced NGINX with Caddy for HTTPS.
-- Updated Hostinger DNS to use `A` records (removed conflicting CNAME).
-- Wrote `Caddyfile` to serve `z-thedev.tech` + `www.z-thedev.tech`.
-- Ran `docker-compose up -d` — Caddy auto-issued TLS certificates.
-- Took snapshot: `ready-for-dns`.
+- Migrated from DigitalOcean to Linode
+- Renamed host to `***-dev`
+- Created new user with `sudo` access
+- Added SSH key and secured permissions
+- Locked down UFW (allow VPN only)
+- Reinstalled `fail2ban` with correct syntax
+- Ran full Lynis audit and reviewed results
+- Installed Docker + `docker-compose` (manual binary method)
+- Created test site with `nginx:alpine`
+- Swapped to Caddy for HTTPS support
+- Updated DNS via Hostinger (`A` records only)
+- Wrote `Caddyfile` for `z-thedev.tech` and `www.z-thedev.tech`
+- Ran `docker-compose up -d` — Caddy issued TLS certs
+- Took snapshot: `ready-for-dns`
 
-### Security Steps
-- Applied SSH hardening per Lynis suggestions.
-- Disabled root login, set SSH banner.
-- Installed audit tools: `auditd`, `acct`, and log rotation.
-- Ensured unattended security updates were enabled.
-- Docker volume with proper permissions created for NGINX cache.
+### Security Enhancements
+- SSH hardening per Lynis suggestions
+- Root login disabled, SSH banner set
+- Installed: `auditd`, `acct`, and configured log rotation
+- Enabled automatic security updates
+- Configured Docker volume permissions for NGINX cache
 
 ### Problems
-- Fail2ban wouldn’t start due to malformed config (typo in `systemd` spelling).
-- Docker permissions required adding user to `docker` group.
-- Docker volume mounts had permission issues — fixed via manual `chown`.
-- Orphaned NGINX containers caused network errors:
+- `fail2ban` failed due to typo in `systemd`
+- Had to add user to `docker` group
+- Docker volume permissions — fixed via `chown`
+- Orphaned containers caused network errors:
   ```bash
   docker stop dockerzthedevcom_web_1
   docker rm dockerzthedevcom_web_1
   docker network rm dockerzthedevcom_default
   ```
-- TLS warnings in Caddy logs were just part of provisioning — resolved by waiting.
+- Caddy’s TLS warnings were temporary — resolved by waiting
 
-### Final Setup
+### Final Project Structure
 ```bash
 ~/docker.zthedev.com/
 ├── html/
@@ -74,7 +72,7 @@ A breakdown of setting up and hardening a Docker server from scratch, culminatin
 └── docker-compose.yml
 ```
 
-### `Caddyfile`:
+### Caddyfile
 ```caddyfile
 z-thedev.tech, www.z-thedev.tech {
     root * /srv
@@ -82,7 +80,7 @@ z-thedev.tech, www.z-thedev.tech {
 }
 ```
 
-### `docker-compose.yml`:
+### docker-compose.yml
 ```yaml
 version: '3.9'
 
@@ -104,95 +102,90 @@ volumes:
   caddy_config:
 ```
 
-## Summary for 2025-03-31: Docker CI/CD Setup and GitHub Integration
+---
 
-### What We Did:
+## 2025-03-31 — Docker CI/CD Setup + GitHub Integration
 
-#### 1. **Cleaned Up Docker Volumes and Containers**
-- Shut down running containers using `docker-compose down`
-- Removed orphaned or stuck volumes and networks
-- Verified Docker status and cleared unused assets
+### What I Did
 
-#### 2. **Updated Docker Image & Repository**
-- Built Docker image with tag: `zthdev/mycaddy:latest`
-- Logged in to Docker Hub and fixed access issues (used correct username)
-- Successfully pushed image to Docker Hub
+#### 1. Cleaned Docker Environment
+- Shut down containers: `docker-compose down`
+- Removed orphaned volumes and networks
+- Verified Docker health and cleaned up assets
 
-#### 3. **Prepared Project Repository**
-- Reviewed project files:
+#### 2. Updated Docker Image & Repository
+- Built and tagged image: `zthdev/mycaddy:latest`
+- Logged into Docker Hub (fixed username issue)
+- Pushed image to Docker Hub
+
+#### 3. Prepared GitHub Repo
+- Confirmed files:
   - `Dockerfile`
   - `docker-compose.yml`
   - `Caddyfile`
   - `html/`
-- Ensured everything was committed to a GitHub repo named `z-thedev.tech`
+- All committed to GitHub repo: `z-thedev.tech`
 
-#### 4. **Created GitHub Actions Workflow**
+#### 4. Created GitHub Actions Workflow
 - Added `.github/workflows/build-and-deploy.yml`
-- Defined steps for building Docker image and pushing to Docker Hub
-- Stored DockerHub credentials as GitHub Secrets:
+- Steps:
+  - Build Docker image
+  - Push to Docker Hub
+- Stored secrets:
   - `DOCKER_USERNAME`
   - `DOCKER_PASSWORD`
 
-#### 5. **Troubleshooting Login Issues**
-- Encountered error: `incorrect username or password`
-- Moved secrets out of `env` block to top-level GitHub repo secrets
-- Retested login and confirmed credentials were saved correctly
+#### 5. Troubleshooting Login Issues
+- Error: `incorrect username or password`
+- Moved secrets to top-level GitHub Secrets
+- Retested — login worked
 
-### What’s Left:
+### Next Steps
 - Confirm successful workflow run (build + push)
-- Automate container redeployment or pull new image on your server
+- Automate server container pull and redeploy on push
 
 ---
 
-### Notes:
-- Your Docker image is ready and tested locally.
-- GitHub repo is linked and secrets are securely stored.
-- CI pipeline is configured and almost complete.
+## 2025-04-03 — Troubleshooting Deployment Pipeline
 
-## Journal Entry – April 3, 2025
+### Goal
+Get automatic deployment via GitHub Actions + Docker + Appleboy SSH working.
 
-Title: Troubleshooting the Pipeline: SSH, Docker, and Deployment Woes
+### What Went Well
+- CI pipeline builds image on push to `main`
+- Image auto-pushes to Docker Hub
+- SSH works manually via terminal
+- Pipeline logic is solid and structured
 
-Today was all about fine-tuning my GitHub Actions workflow for automatic deployment using Docker and Appleboy’s SSH action.
-
-I started by setting up a Docker-based CI/CD pipeline that builds my mycaddy image and pushes it to Docker Hub when I push to the main branch. Then, the appleboy/ssh-action was supposed to SSH into my server and run docker compose pull && up -d to update the website.
-
-Things were going smoothly until… the error.
-
-I hit an authentication failure on the Appleboy SSH step. Manual SSH login worked just fine, but the GitHub Action kept throwing:
-
+### Main Issue
+SSH handshake fails in GitHub Action:
+```text
 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey], no supported methods remain
+```
 
-That led me down a rabbit hole of debugging:
-	•	Verified my SSH key format
-	•	Recreated my key using ssh-keygen -t ed25519
-	•	Ensured the public key was onthe server under the right user
+### What I Tried
+- Verified SSH key format and encoding
+- Recreated key using:
+  ```bash
+  ssh-keygen -t ed25519
+  ```
+- Confirmed public key added to server
+- Verified private key is correctly stored in GitHub Secrets
+- Tried both raw and base64-encoded formats
+- Set `debug: true` on Appleboy’s action
+- Used `ssh -v` locally — no problems
 
-Made sure the private key was correctly formatted and stored in GitHub Secrets
-
-Tried both raw and base64-encoded key variants
-
-Used the debug: true flag in the Action for more insight
-
-Even ran a manual SSH session with -v to confirm everything worked locally
-
-Despite all of this, the action still failed at the handshake. It’s a bit of a mystery, but I’m narrowing it down—suspecting GitHub's handling of multi-line secrets or key parsing quirks in Appleboy’s action.
+### Suspicions
+- GitHub Secrets might mishandle multiline keys
+- Appleboy Action may not parse ED25519 keys correctly without extra formatting
 
 ### Wins
-
-Built a working Docker image
-
-Pushed to Docker Hub automatically
-
-Validated manual SSH access
-
-Cleaned and structured the pipeline logic
+- Built & published Docker image
+- Manual SSH access confirmed
+- CI logic ready and working
 
 ### Still To Solve
+- Fix Appleboy SSH key parsing in GitHub Actions
+- Complete push-to-deploy automation
 
-Appleboy SSH key parsing issue
-
-Full deployment on push trigger
-
-All in all, a good day of detective work in DevOps land.
 
