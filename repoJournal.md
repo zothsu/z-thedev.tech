@@ -149,3 +149,50 @@ volumes:
 - GitHub repo is linked and secrets are securely stored.
 - CI pipeline is configured and almost complete.
 
+## Journal Entry – April 3, 2025
+
+Title: Troubleshooting the Pipeline: SSH, Docker, and Deployment Woes
+
+Today was all about fine-tuning my GitHub Actions workflow for automatic deployment using Docker and Appleboy’s SSH action.
+
+I started by setting up a Docker-based CI/CD pipeline that builds my mycaddy image and pushes it to Docker Hub when I push to the main branch. Then, the appleboy/ssh-action was supposed to SSH into my server and run docker compose pull && up -d to update the website.
+
+Things were going smoothly until… the error.
+
+I hit an authentication failure on the Appleboy SSH step. Manual SSH login worked just fine, but the GitHub Action kept throwing:
+
+ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey], no supported methods remain
+
+That led me down a rabbit hole of debugging:
+	•	Verified my SSH key format
+	•	Recreated my key using ssh-keygen -t ed25519
+	•	Ensured the public key was onthe server under the right user
+
+Made sure the private key was correctly formatted and stored in GitHub Secrets
+
+Tried both raw and base64-encoded key variants
+
+Used the debug: true flag in the Action for more insight
+
+Even ran a manual SSH session with -v to confirm everything worked locally
+
+Despite all of this, the action still failed at the handshake. It’s a bit of a mystery, but I’m narrowing it down—suspecting GitHub's handling of multi-line secrets or key parsing quirks in Appleboy’s action.
+
+### Wins
+
+Built a working Docker image
+
+Pushed to Docker Hub automatically
+
+Validated manual SSH access
+
+Cleaned and structured the pipeline logic
+
+### Still To Solve
+
+Appleboy SSH key parsing issue
+
+Full deployment on push trigger
+
+All in all, a good day of detective work in DevOps land.
+
